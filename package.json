@@ -1,0 +1,40 @@
+{
+	"name": "agency-pkg-polyfills",
+	"version": "0.0.1",
+	"description": "agency - frontend package polyfills",
+	"keywords": [
+		"boilerplate",
+		"package",
+		"polyfills"
+	],
+	"homepage": "https://github.com/StephanGerbeth/agency-pkg-polyfills#readme",
+	"bugs": {
+		"url": "https://github.com/StephanGerbeth/agency-pkg-polyfills/issues"
+	},
+	"license": "MIT",
+	"author": "Stephan Gerbeth <stephan.gerbeth@gmail.com>",
+	"contributors": [
+		{
+			"name": "Stephan Gerbeth",
+			"email": "stephan.gerbeth@grabarzundpartner.de"
+		},
+		{
+			"name": "Thorn Walli",
+			"email": "lammpee@gmail.com; thorn.walli@grabarzundpartner.de"
+		}
+	],
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/StephanGerbeth/agency-pkg-polyfills.git"
+	},
+	"scripts": {
+		"install": "node ./install.js",
+		"dev": "node node_modules/gulp/bin/gulp run --serverConfig=node_modules/agency-boilerplate/env/config/local.json --configTasks=node_modules/agency-boilerplate/env/config/tasks.json --env=package-development --server=agency-server --packageDev=true",
+		"prod": "node node_modules/gulp/bin/gulp run --serverConfig=node_modules/agency-boilerplate/env/config/local.json --configTasks=node_modules/agency-boilerplate/env/config/tasks.json --env=production --server=agency-server --packageDev=true"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"agency-boilerplate": "git+https://git@github.com/StephanGerbeth/agency-boilerplate.git#feature/packages"
+	}
+}
