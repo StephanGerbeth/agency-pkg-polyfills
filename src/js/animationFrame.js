@@ -3,9 +3,10 @@
 var nativeSupport = true;
 var taskNames = {};
 var mutateTasks = [];
+var listeners = [];
 var timer = null;
 
-module.exports = (function (window) {
+module.exports = (function(window) {
     var lastTime = 0;
     var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame;
     var cancelAnimationFrame = window.cancelRequestAnimationFrame || window.webkitCancelRequestAnimationFrame || window.mozCancelRequestAnimationFrame;
@@ -15,7 +16,7 @@ module.exports = (function (window) {
     // heavily inspired from @darius gist mod: https://gist.github.com/paulirish/1579671#comment-837945
     if (!requestAnimationFrame || !cancelAnimationFrame) {
         nativeSupport = false;
-        requestAnimationFrame = function (callback) {
+        requestAnimationFrame = function(callback) {
             var now = 0;
             if (Date.now) {
                 now = +Date.now();
@@ -24,7 +25,7 @@ module.exports = (function (window) {
             }
 
             var nextTime = Math.max(lastTime + 16, now);
-            return setTimeout(function () {
+            return setTimeout(function() {
                 callback(lastTime = nextTime);
             }, nextTime - now);
         };
@@ -38,11 +39,11 @@ module.exports = (function (window) {
     loop();
 
     return {
-        add: function (callback) {
+        add: function(callback) {
             window.requestAnimationFrame(callback);
         },
 
-        addLoop: function (duration, callback) {
+        addLoop: function(duration, callback) {
             var handler = {
                 id: null,
                 begin: 0,
@@ -53,9 +54,9 @@ module.exports = (function (window) {
             (function animloop(time) {
                 handler.id = window.requestAnimationFrame(animloop);
                 handler.begin = handler.begin || time;
-                if(time) {
+                if (time) {
                     handler.current = (time - handler.begin) / duration;
-                    if(handler.current >= 1) {
+                    if (handler.current >= 1) {
                         window.cancelRequestAnimationFrame(handler.id);
                         handler.callback(1);
                     } else {
@@ -66,8 +67,22 @@ module.exports = (function (window) {
             return handler;
         },
 
-        cancelLoop: function (handler) {
+        cancelLoop: function(handler) {
             window.cancelRequestAnimationFrame(handler.id);
+        },
+
+        addLoopListener: function(name, callback) {
+            listeners.push({
+                name: name,
+                callback: callback
+            });
+        },
+        removeLoopListener: function(name) {
+            delete listeners[listeners.indexOf(listeners.find(function(listener) {
+                    if (listener.name === name) {
+                        return listener;
+                    }
+            }))];
         },
 
         throttle: function(taskName, mutate, measure) {
@@ -103,11 +118,15 @@ module.exports = (function (window) {
 
 function loop() {
     var task;
-    while(mutateTasks.length) {
+    while (mutateTasks.length) {
         task = mutateTasks.pop();
         task.mutate();
         taskNames[task.name] = false;
     }
+
+    listeners.forEach(function(listener) {
+        listener.callback();
+    });
 
     global.requestAnimationFrame(loop);
 }
