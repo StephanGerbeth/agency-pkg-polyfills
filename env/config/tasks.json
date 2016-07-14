@@ -167,24 +167,6 @@
       "src": ["index.pcss", "src/**/*.pcss", "test/pcss/**/*.pcss"]
     }]
   },
-  "purecss": {
-    "prefix": "grid",
-    "columnHasPrefix": true,
-    "columns": 12,
-    "gutterWidth": "0.9375rem",
-    "columnPrefix": "col",
-    "wrapperBreakpoints": ["md", "lg"],
-    "breakpoints": {
-      "xs": "30em",
-      "sm": "48em",
-      "md": "62em",
-      "lg": "75em"
-    },
-    "files": {
-      "dest": "./generated/pcss/",
-      "src": ["base", "grids-core"]
-    }
-  },
   "sitemap": {
     "subtasks": [{
       "name": "default",
